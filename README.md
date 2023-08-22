@@ -1,3 +1,45 @@
+# Standalone WASM Bug Report
+
+Including WASM files with next.js standalone fails. This example uses @dqbd/tiktoken as a proof of concept.
+
+Running the developer build (`npm run dev`) and accessing localhost:3000 works, you should see a page like below.
+
+When running the standalone build via `docker compose up`, however, the API route will return an internal server error.
+This error has `tiktoken_bg.wasm` missing from the standalone build:
+
+```
+web  | Listening on port 3000 url: http://f1351de2d44b:3000
+web  | Error: Missing tiktoken_bg.wasm
+web  |     at 7079 (/app/apps/web/.next/server/chunks/512.js:303:26)
+web  |     at __webpack_require__ (/app/apps/web/.next/server/webpack-runtime.js:25:42)
+web  |     at 1200 (/app/apps/web/.next/server/app/api/token-test/route.js:133:72)
+web  |     at __webpack_require__ (/app/apps/web/.next/server/webpack-runtime.js:25:42)
+web  |     at 8678 (/app/apps/web/.next/server/app/api/token-test/route.js:80:17)
+web  |     at __webpack_require__ (/app/apps/web/.next/server/webpack-runtime.js:25:42)
+web  |     at __webpack_exec__ (/app/apps/web/.next/server/app/api/token-test/route.js:165:39)
+web  |     at /app/apps/web/.next/server/app/api/token-test/route.js:166:70
+web  |     at __webpack_require__.X (/app/apps/web/.next/server/webpack-runtime.js:150:21)
+web  |     at /app/apps/web/.next/server/app/api/token-test/route.js:166:47
+```
+
+## Expected result
+
+> # Server component
+> Tokens: 25
+>
+> Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.
+> # Client component
+> Tokens: 25
+>
+> Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.
+>
+> # API route
+> Response status: OK
+>
+> Tokens: 25
+>
+> Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris.
+
 # Turborepo Docker starter
 
 This is an official Docker starter Turborepo.
